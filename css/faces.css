@@ -1,0 +1,29 @@
+body {
+	background-color: #F3F3F3;
+}
+
+#title {
+	background-color: #CDD7DE;
+}
+
+@media(max-width: 768px) {
+	h1 {
+		margin-top: 0;
+		padding-top: 20px;
+	}
+}
+
+#navigation {
+	background-color: #D0D2D2;
+	padding-right: 0;
+	padding-left: 0;
+}
+
+#content {
+	background-color: #FFFFFF;
+	padding-top: 30px;
+}
+
+#menu-button {
+	margin: -50px 10px 0 0;
+}
