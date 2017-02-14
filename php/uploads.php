@@ -1,3 +1,8 @@
+<?php
+	require_once 'connect.php';
+	require_once 'faceapi.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +33,6 @@
 				<ul class="nav nav-tabs nav-justified">
 					<li><a href="faces.php">Faces</a></li>
 					<li class="active"><a href="uploads.php">Upload</a></li>
-					<li><a href="search.php">Search</a></li>
 				</ul>
 			</div>
 			<div id="content" class="col-sm-offset-1 col-sm-10">
@@ -81,6 +85,17 @@
 			if ($_FILES) {
 				$dest_folder = "../images/";
 				move_uploaded_file($_FILES['picture']['tmp_name'], $dest_folder . $filename);
+				$url = "http://" . $_SERVER['HTTP_HOST'] . "/~aflorez2015/faces/images/" . $filename;
+				$json = face($url);
+
+				$sql = "INSERT INTO faces (title, comments, picture, face) 
+						VALUES ('{$title}', '{$comments}', '{$filename}', '{$json}')";
+				if ($db->query($sql) === TRUE) {
+					echo "<br><br>The picture has been saved successfully!<br>";
+				}
+				else {
+					echo "<br><br>Error saving the new picture<br>";
+				}
 			}
 		}
 	?>

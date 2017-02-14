@@ -1,3 +1,7 @@
+<?php
+	require_once 'connect.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-offset-1 col-sm-10">
+			<div id="title" class="col-sm-offset-1 col-sm-10">
 				<h1 class="text-center">Faces</h1>
 				<span id="menu-button" class="glyphicon glyphicon-menu-hamburger btn btn-default pull-right"></span>
 				<span class="clearfix"></span>
@@ -28,11 +32,66 @@
 				<ul class="nav nav-tabs nav-justified">
 					<li class="active"><a href="faces.php">Faces</a></li>
 					<li><a href="uploads.php">Upload</a></li>
-					<li><a href="search.php">Search</a></li>
 				</ul>
 			</div>
-			<div class="col-sm-offset-1 col-sm-10">
-				
+			<div id="content" class="col-sm-offset-1 col-sm-10">
+
+			<?php
+				$sql = "SELECT title, comments, picture, face FROM faces ORDER BY picture DESC";
+				$result = mysqli_query($db, $sql);
+
+				if (!$result) {
+					echo "Error trying to obtain the pictures " . mysqli_error();
+					exit;
+				}
+
+				if (mysqli_num_rows($result) == 0) {
+					echo "No pictures found!";
+					exit;
+				}
+
+				while ($row = mysqli_fetch_assoc($result)) {
+					$str = $row['face'];
+					$json = json_decode($str, true);
+
+					echo '
+						<div class="col-md-12 panel">
+							<div class="col-md-7">
+								<img class="pic" src="../images/' . $row['picture'] . '"> 
+							</div>
+							<div class="col-sm-5">
+								<h3>Title</h3>
+								<p>' . $row['title'] . '</p>
+								<h3>Comments</h3>
+								<p>' . $row['comments'] . '</p>
+								<h3>Picture Details</h3>';
+					foreach ($json as $person) {
+						if (isset($person['faceAttributes'])) {
+							if (isset($person['faceAttributes']['gender'])) {
+								$gender = $person['faceAttributes']['gender'];
+								echo "Gender: "; print_r($gender); echo "<br>";
+							}
+							if (isset($person['faceAttributes']['age'])) {
+								$age = $person['faceAttributes']['age'];
+								echo "Estimated Age: "; print_r($age); echo "<br>";
+							}
+							if (isset($person['faceAttributes']['smile'])) {
+								$smile = $person['faceAttributes']['smile'] * 100;
+								echo "Smile: "; print_r($smile); echo "%<br><br>";
+							}
+						}
+						else {
+							echo "Undefined details";
+						}
+					}
+
+					echo '
+							</div>
+						</div>';
+				}
+			?>
+
+
 			</div>
 		</div>
 	</div>
