@@ -17,5 +17,5 @@
 		echo "Error creating table faces: " . $db->error . "<br>";
 	}
 
-	header("location: faces/php/faces.php");
+	header("location: php/faces.php");
 ?>

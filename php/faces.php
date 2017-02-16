@@ -41,7 +41,7 @@
 				$result = mysqli_query($db, $sql);
 
 				if (!$result) {
-					echo "Error trying to obtain the pictures " . mysqli_error();
+					echo "Error trying to obtain the pictures " . mysqli_error($db);
 					exit;
 				}
 
